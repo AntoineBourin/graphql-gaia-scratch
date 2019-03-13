@@ -1,3 +1,4 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+graphQLEntryPoint:
+  path: /api/graphql
+  controller: App\Controller\GraphEntryController::graphQLEntryPoint
+  methods: POST
