@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cee4085fe3fa88057621162b3c43239f",
+    "content-hash": "c81e9794568c7ecc6422a246fd897d63",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -5211,6 +5211,58 @@
             "time": "2018-12-25T11:19:39+00:00"
         },
         {
+            "name": "webonyx/graphql-php",
+            "version": "v0.13.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webonyx/graphql-php.git",
+                "reference": "0226b08429e5a102ea99cda9ddc4a7185006473f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/0226b08429e5a102ea99cda9ddc4a7185006473f",
+                "reference": "0226b08429e5a102ea99cda9ddc4a7185006473f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": "^7.1||^8.0"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^5.0",
+                "phpbench/phpbench": "^0.14.0",
+                "phpstan/phpstan": "0.10.5",
+                "phpstan/phpstan-phpunit": "0.10.0",
+                "phpstan/phpstan-strict-rules": "0.10.1",
+                "phpunit/phpcov": "^5.0",
+                "phpunit/phpunit": "^7.2",
+                "psr/http-message": "^1.0",
+                "react/promise": "2.*"
+            },
+            "suggest": {
+                "psr/http-message": "To use standard GraphQL server",
+                "react/promise": "To leverage async resolving on React PHP platform"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GraphQL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A PHP port of GraphQL reference implementation",
+            "homepage": "https://github.com/webonyx/graphql-php",
+            "keywords": [
+                "api",
+                "graphql"
+            ],
+            "time": "2019-03-09T15:34:29+00:00"
+        },
+        {
             "name": "zendframework/zend-code",
             "version": "3.3.1",
             "source": {
@@ -5745,16 +5797,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.11.4",
+            "version": "v1.11.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "540996bfdcc14ca38dfe4865c020d965020ae821"
+                "reference": "186ffc80b8f363e04ea3c2ebf49e1263a84b4e39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/540996bfdcc14ca38dfe4865c020d965020ae821",
-                "reference": "540996bfdcc14ca38dfe4865c020d965020ae821",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/186ffc80b8f363e04ea3c2ebf49e1263a84b4e39",
+                "reference": "186ffc80b8f363e04ea3c2ebf49e1263a84b4e39",
                 "shasum": ""
             },
             "require": {
@@ -5807,7 +5859,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2019-03-01T20:45:16+00:00"
+            "time": "2019-03-11T15:55:09+00:00"
         },
         {
             "name": "symfony/panther",
