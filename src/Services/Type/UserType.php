@@ -2,11 +2,10 @@
 
 namespace App\Services\Type;
 
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 
-class UserType extends ObjectType
+class UserType extends FieldResolver
 {
     public function __construct()
     {
@@ -24,17 +23,7 @@ class UserType extends ObjectType
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
-                $resolverMethod = sprintf('method%s', ucfirst($info->fieldName));
-                if (method_exists($this, $resolverMethod)) {
-                    return $this->{$resolverMethod}($value, $args, $context);
-                } else {
-                    $methodField = sprintf('get%s', ucfirst($info->fieldName));
-                    if (method_exists($value, $methodField)) {
-                        return $value->{$methodField}();
-                    } else {
-                        return null;
-                    }
-                }
+                return $this->resolveField($value, $args, $context, $info);
             }
         ];
 
