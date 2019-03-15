@@ -16,6 +16,9 @@ class TypesChain
         $this->types[] = $type;
     }
 
+    /**
+     * @return GraphCustomTypeInterface[]
+     */
     public function getTypes(): array
     {
         return $this->types;
