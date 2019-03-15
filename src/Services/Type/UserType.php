@@ -2,13 +2,20 @@
 
 namespace App\Services\Type;
 
+use App\Repository\UserRepository;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 
-class UserType extends FieldResolver implements GraphCustomTypeInterface
+class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
 {
-    public function __construct()
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
     {
+        $this->userRepository = $userRepository;
         $config = [
             'name' => 'User',
             'description' => 'User using application',
@@ -27,7 +34,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
             }
         ];
 
-        parent::__construct($config);
+        parent::__construct($config, $userRepository, 'user');
     }
 
 
@@ -36,21 +43,9 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getRootQuery(): array
     {
-        $currentInstance = new static();
-        return [
-            'getUserById' => [
-                'type' => $currentInstance,
-                'description' => 'Returns user with id',
-                'args' => [
-                    'id' => Type::nonNull(Type::id()),
-                ],
-            ],
-            'getUsers' => [
-                'type' => Type::listOf($currentInstance),
-                'description' => 'Return all users',
-                'args' => [],
-            ],
-        ];
+        $currentInstance = new static($this->userRepository);
+
+        return $this->getBaseTypeQueries($currentInstance);
     }
 
     /**

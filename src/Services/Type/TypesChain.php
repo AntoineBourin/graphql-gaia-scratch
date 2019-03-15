@@ -11,12 +11,12 @@ class TypesChain
         $this->types = [];
     }
 
-    public function addType($type)
+    public function addType(GraphCustomTypeInterface $type): void
     {
         $this->types[] = $type;
     }
 
-    public function getTypes()
+    public function getTypes(): array
     {
         return $this->types;
     }
