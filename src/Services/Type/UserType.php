@@ -31,6 +31,9 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
     }
 
 
+    /**
+     * @return array
+     */
     public function getRootQuery(): array
     {
         $currentInstance = new static();
@@ -50,6 +53,9 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getRootMutations(): array
     {
         return [];
