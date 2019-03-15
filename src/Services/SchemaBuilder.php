@@ -3,13 +3,11 @@
 namespace App\Services;
 
 use App\Services\Type\QueryType;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Error\Debug;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class SchemaBuilder
 {
@@ -19,11 +17,13 @@ class SchemaBuilder
     private $em;
 
     private $schema;
+    private $typesMapper;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, QueryType $queryType, TypesMapper $typesMapper)
     {
+        $this->typesMapper = $typesMapper;
         $this->schema = new Schema([
-            'query' => new QueryType($em)
+            'query' => $queryType,
         ]);
         $this->em = $em;
     }

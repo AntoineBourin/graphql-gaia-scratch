@@ -3,7 +3,6 @@
 namespace App\Services\Type;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -19,8 +18,9 @@ class QueryType extends ObjectType
     /**
      * QueryType constructor.
      * @param EntityManagerInterface $em
+     * @param TypesChain $types
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, TypesChain $types)
     {
         $this->em = $em;
         $config = [
