@@ -5,7 +5,7 @@ namespace App\Services\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 
-class UserType extends FieldResolver
+class UserType extends FieldResolver implements GraphCustomTypeInterface
 {
     public function __construct()
     {
