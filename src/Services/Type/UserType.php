@@ -13,6 +13,9 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
      */
     private $userRepository;
 
+    /**
+     * @param UserRepository $userRepository
+     */
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
@@ -37,15 +40,12 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
         parent::__construct($config, $userRepository, 'user');
     }
 
-
     /**
      * @return array
      */
     public function getRootQuery(): array
     {
-        $currentInstance = new static($this->userRepository);
-
-        return $this->getBaseTypeQueries($currentInstance);
+        return $this->getBaseTypeQueries($this);
     }
 
     /**
