@@ -31,4 +31,27 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
     }
 
 
+    public function getRootQuery(): array
+    {
+        $currentInstance = new static();
+        return [
+            'getUserById' => [
+                'type' => $currentInstance,
+                'description' => 'Returns user with id',
+                'args' => [
+                    'id' => Type::nonNull(Type::id()),
+                ],
+            ],
+            'getUsers' => [
+                'type' => Type::listOf($currentInstance),
+                'description' => 'Return all users',
+                'args' => [],
+            ],
+        ];
+    }
+
+    public function getRootMutations(): array
+    {
+        return [];
+    }
 }

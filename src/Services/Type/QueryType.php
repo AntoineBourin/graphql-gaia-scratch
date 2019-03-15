@@ -22,18 +22,11 @@ class QueryType extends ObjectType
      */
     public function __construct(EntityManagerInterface $em, TypesChain $types)
     {
+        $rootQueries = $this->getAllRootQueries($types);
         $this->em = $em;
         $config = [
             'name' => 'Query',
-            'fields' => [
-                'user' => [
-                    'type' => new UserType(),
-                    'description' => 'Returns user with id',
-                    'args' => [
-                        'id' => Type::nonNull(Type::id()),
-                    ]
-                ],
-            ],
+            'fields' => $rootQueries,
             'resolveField' => function($val, $args, $context, ResolveInfo $info) {
                 return $this->{$info->fieldName}($val, $args, $context, $info);
             }
@@ -42,8 +35,19 @@ class QueryType extends ObjectType
         parent::__construct($config);
     }
 
-    public function user($rootValue, $args)
+    /**
+     * Get all root queries mapped by TypesChain
+     *
+     * @param TypesChain $typesChain
+     * @return array
+     */
+    public function getAllRootQueries(TypesChain $typesChain): array
     {
-        return $this->em->getRepository(User::class)->find($args['id']);
+        $rootQueries = [];
+        foreach ($typesChain->getTypes() as $type) {
+            $rootQueries = array_merge($rootQueries, $type->getRootQuery());
+        }
+
+        return $rootQueries;
     }
 }
