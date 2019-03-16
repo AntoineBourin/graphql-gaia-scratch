@@ -6,10 +6,10 @@ login_check:
   path:     /api/login_check
   methods:  [POST]
 register:
-  path: /user/register
+  path: /api/user/register
   methods: [POST]
   controller: App\Controller\UserController::registerUserAction
 account_confirmation:
-  path: /user/confirm
+  path: /api/user/confirm-email
   methods: [PUT]
   controller: App\Controller\AccountConfirmationController::confirmAccountWithTokenAction

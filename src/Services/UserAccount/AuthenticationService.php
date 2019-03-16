@@ -103,7 +103,7 @@ class AuthenticationService
     public function sendUserConfirmationEmail(User $user)
     {
         $sender = new MailSender($user->getFirstName(), $user->getLastName(), $user->getEmail());
-        $mailSubject = sprintf('[Gaia] %s, votre confirmation d\'inscription', $user->getFirstName());
+        $mailSubject = sprintf('%s, votre confirmation d\'inscription', $user->getFirstName());
         $message = [
             'template' => 'emails/user-confirmation.html.twig',
             'properties' => [

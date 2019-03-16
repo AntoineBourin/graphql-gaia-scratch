@@ -21,7 +21,7 @@ security:
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         api:
-            pattern:   ^/api
+            pattern:   ^/api/graphql
             stateless: true
             guard:
                 authenticators:
@@ -31,4 +31,4 @@ security:
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/graphql, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/graphql, roles: IS_AUTHENTICATED_ANONYMOUSLY }

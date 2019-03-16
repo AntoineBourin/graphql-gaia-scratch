@@ -39,7 +39,7 @@ class MailConsumer implements ConsumerInterface
         );
 
         $message = (new \Swift_Message($transporter->subject))
-            ->setFrom($transporter->from)
+            ->setFrom([$transporter->from => getenv('APP_NAME')])
             ->setTo($transporter->sender->getEmail())
             ->setBody($body, 'text/html');
 
