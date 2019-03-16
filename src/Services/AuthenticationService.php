@@ -49,8 +49,6 @@ class AuthenticationService
 
         $validationsError = $this->validator->validate($user);
 
-        $user->setPassword($this->encoder->encodePassword($user, $request->has('password') ?? $request->get('password')));
-
         if ($validationsError->count() > 0) {
             $messages = [];
 
@@ -60,6 +58,8 @@ class AuthenticationService
 
             throw new InvalidUserException(json_encode($messages), 422);
         }
+
+        $user->setPassword($this->encoder->encodePassword($user, $request->get('password')));
 
         $this->em->persist($user);
         $this->em->flush();
