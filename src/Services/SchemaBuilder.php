@@ -16,7 +16,14 @@ class SchemaBuilder
      */
     private $em;
 
+    /**
+     * @var Schema
+     */
     private $schema;
+
+    /**
+     * @var TypesMapper
+     */
     private $typesMapper;
 
     public function __construct(EntityManagerInterface $em, QueryType $queryType, TypesMapper $typesMapper)
@@ -28,13 +35,13 @@ class SchemaBuilder
         $this->em = $em;
     }
 
-    public function throwNewGraphQuery(?string $query)
+    public function throwNewGraphQuery(?string $query, array $context): JsonResponse
     {
         $result = GraphQL::executeQuery(
             $this->schema,
             $query,
             null,
-            null
+            $context
         );
 
         return new JsonResponse($result->toArray(Debug::INCLUDE_DEBUG_MESSAGE));

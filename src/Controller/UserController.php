@@ -14,7 +14,7 @@ class UserController
      * @param AuthenticationService $authService
      * @return JsonResponse
      */
-    public function registerUserAction(Request $request, AuthenticationService $authService)
+    public function registerUserAction(Request $request, AuthenticationService $authService): JsonResponse
     {
         try {
             $authService->createUserAuthentication($request->request);

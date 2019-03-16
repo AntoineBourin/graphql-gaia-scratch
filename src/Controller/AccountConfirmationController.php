@@ -19,7 +19,11 @@ class AccountConfirmationController
         $this->accountService = $accountService;
     }
 
-    public function confirmAccountWithTokenAction(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function confirmAccountWithTokenAction(Request $request): JsonResponse
     {
         $token = $request->query->get('token') ?? '';
 

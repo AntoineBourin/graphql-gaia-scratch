@@ -5,6 +5,7 @@ namespace App\Services\Type;
 use App\Repository\UserRepository;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
 {
@@ -14,10 +15,17 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
     private $userRepository;
 
     /**
-     * @param UserRepository $userRepository
+     * @var TokenStorageInterface
      */
-    public function __construct(UserRepository $userRepository)
+    private $tokenStorage;
+
+    /**
+     * @param UserRepository $userRepository
+     * @param TokenStorageInterface $tokenStorage
+     */
+    public function __construct(UserRepository $userRepository, TokenStorageInterface $tokenStorage)
     {
+        $this->tokenStorage = $tokenStorage;
         $this->userRepository = $userRepository;
         $config = [
             'name' => 'User',
@@ -45,7 +53,7 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
      */
     public function getRootQuery(): array
     {
-        return $this->getBaseTypeQueries($this);
+        return array_merge($this->getBaseTypeQueries($this));
     }
 
     /**
