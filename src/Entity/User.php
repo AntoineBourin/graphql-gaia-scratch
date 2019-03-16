@@ -45,9 +45,26 @@ class User implements UserInterface
      */
     private $enabled;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $confirmationToken;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(string $token): self
+    {
+        $this->confirmationToken = $token;
+
+        return $this;
     }
 
     public function getFirstName(): ?string

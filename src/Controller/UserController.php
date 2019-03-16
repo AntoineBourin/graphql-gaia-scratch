@@ -18,8 +18,12 @@ class UserController
     {
         try {
             $authService->createUserAuthentication($request->request);
-        } catch (InvalidUserException $exception) {
-            return new JsonResponse(json_decode($exception->getMessage()), $exception->getCode());
+        } catch (\Exception $exception) {
+            if ($exception instanceof InvalidUserException) {
+                return new JsonResponse(json_decode($exception->getMessage()), $exception->getCode());
+            } else {
+                return new JsonResponse($exception->getMessage(), 500);
+            }
         }
 
         return new JsonResponse('User created successfully', 201);

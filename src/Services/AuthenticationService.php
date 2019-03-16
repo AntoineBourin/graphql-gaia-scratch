@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Entity\User;
 use App\Exception\InvalidUserException;
+use App\Services\Transport\Consumer\MailConsumer;
+use App\Services\Transport\Sender\MailSender;
+use App\Services\Transport\Transporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -27,16 +29,37 @@ class AuthenticationService
      */
     private $validator;
 
-    public function __construct(UserPasswordEncoderInterface $encoder, EntityManagerInterface $entityManager, ValidatorInterface $validator)
+    /**
+     * @var TokenBuilder
+     */
+    private $tokenGenerator;
+
+    /**
+     * @var MailConsumer
+     */
+    private $mailConsumer;
+
+    public function __construct(
+        UserPasswordEncoderInterface $encoder,
+        EntityManagerInterface $entityManager,
+        ValidatorInterface $validator,
+        TokenBuilder $tokenBuilder,
+        MailConsumer $mailConsumer)
     {
         $this->encoder = $encoder;
         $this->em = $entityManager;
         $this->validator = $validator;
+        $this->tokenGenerator = $tokenBuilder;
+        $this->mailConsumer = $mailConsumer;
     }
 
     /**
      * @param ParameterBag $request
      * @throws InvalidUserException
+     * @throws \App\Exception\EmailNotSent
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function createUserAuthentication(ParameterBag $request)
     {
@@ -46,6 +69,8 @@ class AuthenticationService
         $user->setEmail($request->get('email') ?? NULL);
         $user->setPassword($request->get('password') ?? NULL);
         $user->setEnabled(false);
+
+        $user->setConfirmationToken($this->tokenGenerator->generateUniqToken());
 
         $validationsError = $this->validator->validate($user);
 
@@ -63,5 +88,29 @@ class AuthenticationService
 
         $this->em->persist($user);
         $this->em->flush();
+
+        $this->sendUserConfirmationEmail($user);
+    }
+
+    /**
+     * @param User $user
+     * @throws \App\Exception\EmailNotSent
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    public function sendUserConfirmationEmail(User $user)
+    {
+        $sender = new MailSender($user->getFirstName(), $user->getLastName(), $user->getEmail());
+        $mailSubject = sprintf('[Gaia] %s, votre confirmation d\'inscription', $user->getFirstName());
+        $message = [
+            'template' => 'emails/user-confirmation.html.twig',
+            'properties' => [
+                'user' => $user
+            ],
+        ];
+        $transporter = new Transporter($sender, $mailSubject, $message);
+
+        $this->mailConsumer->emit($transporter);
     }
 }
