@@ -2,7 +2,7 @@
 
 namespace App\Services\Transport\Consumer;
 
-use App\Exception\EmailNotSent;
+use App\Exception\EmailNotSentException;
 use App\Services\Transport\Transporter;
 
 class MailConsumer implements ConsumerInterface
@@ -26,7 +26,7 @@ class MailConsumer implements ConsumerInterface
     /**
      * @param Transporter $transporter
      * @return bool
-     * @throws EmailNotSent
+     * @throws EmailNotSentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -46,7 +46,7 @@ class MailConsumer implements ConsumerInterface
         $successfulRecipients = $this->mailer->send($message);
 
         if ($successfulRecipients === 0) {
-            throw new EmailNotSent('Message cannot be sent to email.', 500);
+            throw new EmailNotSentException('Message cannot be sent to email.', 500);
         }
     }
 }

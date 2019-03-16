@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Services\Type\MutationType;
 use App\Services\Type\QueryType;
 use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Error\Debug;
@@ -26,11 +27,12 @@ class SchemaBuilder
      */
     private $typesMapper;
 
-    public function __construct(EntityManagerInterface $em, QueryType $queryType, TypesMapper $typesMapper)
+    public function __construct(EntityManagerInterface $em, QueryType $queryType, MutationType $mutationType, TypesMapper $typesMapper)
     {
         $this->typesMapper = $typesMapper;
         $this->schema = new Schema([
             'query' => $queryType,
+            'mutation' => $mutationType,
         ]);
         $this->em = $em;
     }

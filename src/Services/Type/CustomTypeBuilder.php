@@ -45,32 +45,4 @@ class CustomTypeBuilder extends ObjectType
             return method_exists($value, $methodField) ? $value->{$methodField}() : null;
         }
     }
-
-    /**
-     * @param $currentInstance
-     * @return array
-     */
-    public function getBaseTypeQueries($currentInstance): array
-    {
-        return [
-            $this->typeName => [
-                'type' => $currentInstance,
-                'description' => sprintf('Returns %s with id', $this->typeName),
-                'args' => [
-                    'id' => Type::nonNull(Type::id()),
-                ],
-                'resolve' => function($value, $args, $context, ResolveInfo $info) {
-                    return $this->typeRepository->find($args['id']);
-                }
-            ],
-            sprintf('%ss', $this->typeName) => [
-                'type' => Type::listOf($currentInstance),
-                'description' => sprintf('Return all %ss', $this->typeName),
-                'args' => [],
-                'resolve' => function() {
-                    return $this->typeRepository->findAll();
-                },
-            ],
-        ];
-    }
 }

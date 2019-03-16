@@ -3,9 +3,11 @@
 namespace App\Services\Type;
 
 use App\Repository\UserRepository;
+use App\Services\Type\Input\UserInputType;
+use Doctrine\ORM\EntityRepository;
+use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
 {
@@ -15,18 +17,18 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
     private $userRepository;
 
     /**
-     * @var TokenStorageInterface
+     * @var UserInputType
      */
-    private $tokenStorage;
+    private $userInputType;
 
     /**
      * @param UserRepository $userRepository
-     * @param TokenStorageInterface $tokenStorage
+     * @param UserInputType $userInputType
      */
-    public function __construct(UserRepository $userRepository, TokenStorageInterface $tokenStorage)
+    public function __construct(UserRepository $userRepository, UserInputType $userInputType)
     {
-        $this->tokenStorage = $tokenStorage;
         $this->userRepository = $userRepository;
+        $this->userInputType = $userInputType;
         $config = [
             'name' => 'User',
             'description' => 'User using application',
@@ -48,19 +50,18 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
         parent::__construct($config, $userRepository, 'user');
     }
 
-    /**
-     * @return array
-     */
-    public function getRootQuery(): array
+    public function getTypeRepository(): EntityRepository
     {
-        return array_merge($this->getBaseTypeQueries($this));
+        return $this->userRepository;
     }
 
-    /**
-     * @return array
-     */
-    public function getRootMutations(): array
+    public function getBaseTypeName(): string
     {
-        return [];
+        return 'user';
+    }
+
+    public function getInputType(): InputType
+    {
+        return $this->userInputType;
     }
 }

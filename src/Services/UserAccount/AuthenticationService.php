@@ -57,7 +57,7 @@ class AuthenticationService
     /**
      * @param ParameterBag $request
      * @throws InvalidUserException
-     * @throws \App\Exception\EmailNotSent
+     * @throws \App\Exception\EmailNotSentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -95,7 +95,7 @@ class AuthenticationService
 
     /**
      * @param User $user
-     * @throws \App\Exception\EmailNotSent
+     * @throws \App\Exception\EmailNotSentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
