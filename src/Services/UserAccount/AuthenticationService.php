@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UserAccount;
 
 use App\Entity\User;
 use App\Exception\InvalidUserException;
+use App\Services\TokenGenerator;
 use App\Services\Transport\Consumer\MailConsumer;
 use App\Services\Transport\Sender\MailSender;
 use App\Services\Transport\Transporter;
@@ -30,7 +31,7 @@ class AuthenticationService
     private $validator;
 
     /**
-     * @var TokenBuilder
+     * @var TokenGenerator
      */
     private $tokenGenerator;
 
@@ -43,7 +44,7 @@ class AuthenticationService
         UserPasswordEncoderInterface $encoder,
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator,
-        TokenBuilder $tokenBuilder,
+        TokenGenerator $tokenBuilder,
         MailConsumer $mailConsumer)
     {
         $this->encoder = $encoder;

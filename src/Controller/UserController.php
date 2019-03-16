@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Exception\InvalidUserException;
-use App\Services\AuthenticationService;
+use App\Services\UserAccount\AuthenticationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

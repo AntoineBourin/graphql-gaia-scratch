@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-class TokenBuilder
+class TokenGenerator
 {
     public function generateUniqToken()
     {
