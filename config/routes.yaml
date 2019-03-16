@@ -9,3 +9,7 @@ register:
   path: /user/register
   methods: [POST]
   controller: App\Controller\UserController::registerUserAction
+account_confirmation:
+  path: /user/confirm
+  methods: [PUT]
+  controller: App\Controller\AccountConfirmationController::confirmAccountWithTokenAction
