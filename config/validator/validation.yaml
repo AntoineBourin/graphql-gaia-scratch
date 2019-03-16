@@ -1,0 +1,10 @@
+App\Entity\User:
+  properties:
+    email:
+      - NotBlank: ~
+      - Email:
+          message: L'email "{{ value }}" n'est pas valide.
+    password:
+      - Length:
+          min: 8
+          minMessage: Votre mot de passe doit être composé de {{ limit }} caractères minimum.
