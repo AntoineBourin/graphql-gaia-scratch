@@ -2,29 +2,13 @@
 
 namespace App\Services\Type;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\Type;
 
-class CustomTypeBuilder extends ObjectType
+class FieldResolver extends ObjectType
 {
-    /**
-     * @var ServiceEntityRepository
-     */
-    private $typeRepository;
-
-    /**
-     * @var string
-     */
-    private $typeName;
-
-    public function __construct($config, EntityRepository $repository, string $typeName)
+    public function __construct($config)
     {
-        $this->typeRepository = $repository;
-        $this->typeName = $typeName;
-
         parent::__construct($config);
     }
 

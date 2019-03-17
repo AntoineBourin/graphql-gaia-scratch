@@ -9,7 +9,7 @@ use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 
-class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
+class UserType extends FieldResolver implements GraphCustomTypeInterface
 {
     /**
      * @var UserRepository
@@ -29,6 +29,7 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
     {
         $this->userRepository = $userRepository;
         $this->userInputType = $userInputType;
+
         $config = [
             'name' => 'User',
             'description' => 'User using application',
@@ -47,19 +48,28 @@ class UserType extends CustomTypeBuilder implements GraphCustomTypeInterface
             }
         ];
 
-        parent::__construct($config, $userRepository, 'user');
+        parent::__construct($config);
     }
 
+    /**
+     * @return EntityRepository
+     */
     public function getTypeRepository(): EntityRepository
     {
         return $this->userRepository;
     }
 
+    /**
+     * @return string
+     */
     public function getBaseTypeName(): string
     {
         return 'user';
     }
 
+    /**
+     * @return InputType
+     */
     public function getInputType(): InputType
     {
         return $this->userInputType;
