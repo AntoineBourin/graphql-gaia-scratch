@@ -2,11 +2,11 @@
 
 namespace App\Services\Type\Input;
 
+use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\InputType;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class UserInputType extends ObjectType implements InputType
+class UserInputType extends InputObjectType implements InputType
 {
     public function __construct()
     {
