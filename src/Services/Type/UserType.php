@@ -74,4 +74,9 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
     {
         return $this->userInputType;
     }
+
+    public function hasResourceAccess($args, $context): bool
+    {
+        return $args['id'] === $context['authentication']['userId'];
+    }
 }

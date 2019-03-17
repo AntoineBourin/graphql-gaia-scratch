@@ -35,7 +35,7 @@ class MutationTypeBuilder
                     'input' => $inputType,
                     'id' => Type::id(),
                 ],
-                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName) {
+                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName, $type) {
                     $objectClass = $typeRepository->find($args['id']);
 
                     if (!$objectClass) {
