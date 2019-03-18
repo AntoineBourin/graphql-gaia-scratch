@@ -77,6 +77,6 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
 
     public function hasResourceAccess($args, $context): bool
     {
-        return $args['id'] === $context['authentication']['userId'];
+        return isset($args['id']) ? $args['id'] === $context['authentication']['userId'] : true;
     }
 }
