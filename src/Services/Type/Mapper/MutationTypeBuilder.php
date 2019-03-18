@@ -3,6 +3,7 @@
 namespace App\Services\Type\Mapper;
 
 use App\Services\Persister\DataPersister;
+use App\Services\Type\Access\AccessChecker;
 use App\Services\Type\GraphCustomTypeInterface;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Error\Error;
@@ -17,9 +18,15 @@ class MutationTypeBuilder
      */
     private $dataPersister;
 
-    public function __construct(DataPersister $dataPersister)
+    /**
+     * @var AccessChecker
+     */
+    private $accessChecker;
+
+    public function __construct(DataPersister $dataPersister, AccessChecker $accessChecker)
     {
         $this->dataPersister = $dataPersister;
+        $this->accessChecker = $accessChecker;
     }
 
     public function __invoke(EntityRepository $typeRepository, string $baseName, GraphCustomTypeInterface $type, InputType $inputType): array
@@ -35,7 +42,8 @@ class MutationTypeBuilder
                     'input' => $inputType,
                     'id' => Type::id(),
                 ],
-                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName) {
+                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName, $type) {
+                    $this->accessChecker->hasAccess($args, $context, $type);
                     $objectClass = $typeRepository->find($args['id']);
 
                     if (!$objectClass) {
@@ -54,7 +62,8 @@ class MutationTypeBuilder
                 'args' => [
                     'id' => Type::id(),
                 ],
-                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName) {
+                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName, $type) {
+                    $this->accessChecker->hasAccess($args, $context, $type);
                     $objectClass = $typeRepository->find($args['id']);
 
                     if (!$objectClass) {
@@ -70,7 +79,8 @@ class MutationTypeBuilder
                 'args' => [
                     'input' => $inputType,
                 ],
-                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName) {
+                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName, $type) {
+                    $this->accessChecker->hasAccess($args, $context, $type);
                     $resourceClass = $typeRepository->getClassName();
                     $denormalizedObject = $this->dataPersister->denormalizeObject($args['input'], $resourceClass, []);
 

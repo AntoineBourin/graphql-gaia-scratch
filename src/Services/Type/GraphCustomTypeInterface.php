@@ -10,4 +10,5 @@ interface GraphCustomTypeInterface
     public function getTypeRepository(): EntityRepository;
     public function getBaseTypeName(): string;
     public function getInputType(): InputType;
+    public function hasResourceAccess($args, $context): bool;
 }

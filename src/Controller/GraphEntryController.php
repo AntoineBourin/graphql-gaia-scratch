@@ -28,7 +28,7 @@ class GraphEntryController
     public function graphQLEntryPoint(Request $request)
     {
         $requestBody = json_decode($request->getContent());
-        $currentContext = $this->contextBuilder->generate($request);
+        $currentContext = $this->contextBuilder->generate();
         return $this->schemaBuilder->throwNewGraphQuery($requestBody->query ?? NULL, $currentContext);
     }
 }

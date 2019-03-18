@@ -2,6 +2,7 @@
 
 namespace App\Services\Type\Mapper;
 
+use App\Services\Type\Access\AccessChecker;
 use App\Services\Type\GraphCustomTypeInterface;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -9,9 +10,14 @@ use GraphQL\Type\Definition\Type;
 
 class QueryTypeBuilder
 {
-    public function __construct()
-    {
+    /**
+     * @var AccessChecker
+     */
+    private $accessChecker;
 
+    public function __construct(AccessChecker $accessChecker)
+    {
+        $this->accessChecker = $accessChecker;
     }
 
     /**
@@ -29,7 +35,8 @@ class QueryTypeBuilder
                 'args' => [
                     'id' => Type::nonNull(Type::id()),
                 ],
-                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository) {
+                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $type) {
+                    $this->accessChecker->hasAccess($args, $context, $type);
                     return $typeRepository->find($args['id']);
                 }
             ],
@@ -37,7 +44,8 @@ class QueryTypeBuilder
                 'type' => Type::listOf($type),
                 'description' => sprintf('Return all %ss', $baseName),
                 'args' => [],
-                'resolve' => function() use ($typeRepository) {
+                'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $type) {
+                    $this->accessChecker->hasAccess($args, $context, $type);
                     return $typeRepository->findAll();
                 },
             ],
