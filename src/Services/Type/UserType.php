@@ -5,6 +5,8 @@ namespace App\Services\Type;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\Type\Input\UserInputType;
+use App\Services\Type\Mapper\GraphTypeMapper;
+use App\Services\Type\Registry\TypesRegistry;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -25,17 +27,17 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
     /**
      * @param UserRepository $userRepository
      * @param UserInputType $userInputType
-     * @param TeamType $teamType
+     * @param TypesRegistry $registry
      */
-    public function __construct(UserRepository $userRepository, UserInputType $userInputType, TeamType $teamType)
+    public function __construct(UserRepository $userRepository, UserInputType $userInputType, TypesRegistry $registry)
     {
         $this->userRepository = $userRepository;
         $this->userInputType = $userInputType;
 
         $config = [
-            'name' => 'User',
+            'name' => $this->getBaseTypeName(),
             'description' => 'User using application',
-            'fields' => function () use($teamType) {
+            'fields' => function () use($registry) {
                 return [
                     'id' => Type::id(),
                     'firstName' => Type::string(),
@@ -43,7 +45,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
                     'password' => Type::string(),
                     'email' => Type::string(),
                     'enabled' => Type::boolean(),
-                    'teams' => Type::listOf($teamType),
+                    'teams' => ['type' => Type::listOf($registry->getTypeByName('Team'))],
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -76,7 +78,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getBaseTypeName(): string
     {
-        return 'user';
+        return 'User';
     }
 
     /**

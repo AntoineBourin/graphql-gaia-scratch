@@ -10,19 +10,18 @@ use GraphQL\Type\Definition\Type;
 
 class UserInputType extends InputObjectType implements InputType
 {
-    public function __construct(TeamInputType $teamType)
+    public function __construct()
     {
         $config = [
             'name' => 'UserInput',
             'description' => 'User input for mutations args',
-            'fields' => function () use($teamType) {
+            'fields' => function () {
                 return [
                     'firstName' => Type::string(),
                     'lastName' => Type::string(),
                     'password' => Type::string(),
                     'email' => Type::string(),
                     'enabled' => Type::boolean(),
-                    'teams' => Type::listOf($teamType),
                 ];
             },
         ];

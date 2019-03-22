@@ -2,10 +2,13 @@
 
 namespace App\Services\Type;
 
+use App\Entity\Team;
 use App\Repository\TeamRepository;
 use App\Repository\UserRepository;
 use App\Services\Type\Input\TeamInputType;
 use App\Services\Type\Input\UserInputType;
+use App\Services\Type\Mapper\GraphTypeMapper;
+use App\Services\Type\Registry\TypesRegistry;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -26,20 +29,22 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
     /**
      * @param TeamRepository $teamRepository
      * @param TeamInputType $teamInputType
+     * @param TypesRegistry $registry
      */
-    public function __construct(TeamRepository $teamRepository, TeamInputType $teamInputType)
+    public function __construct(TeamRepository $teamRepository, TeamInputType $teamInputType, TypesRegistry $registry)
     {
         $this->teamRepository = $teamRepository;
         $this->teamInputType = $teamInputType;
 
         $config = [
-            'name' => 'Team',
+            'name' => $this->getBaseTypeName(),
             'description' => 'Team attached to users',
-            'fields' => function () {
+            'fields' => function () use($registry) {
                 return [
                     'id' => Type::id(),
                     'label' => Type::string(),
                     'description' => Type::string(),
+                    'users' => ['type' => Type::listOf($registry->getTypeByName('User'))],
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -48,6 +53,19 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
         ];
 
         parent::__construct($config);
+    }
+
+    public function methodUsers($value)
+    {
+        if (!$value instanceof Team) {
+            return null;
+        }
+
+        foreach ($value->getUsers() as $user) {
+            $user->removeTeam($value);
+        }
+
+        return $value->getUsers();
     }
 
     /**
@@ -63,7 +81,7 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getBaseTypeName(): string
     {
-        return 'team';
+        return 'Team';
     }
 
     /**
