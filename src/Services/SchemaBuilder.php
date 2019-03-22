@@ -28,20 +28,15 @@ class SchemaBuilder
      * @param EntityManagerInterface $em
      * @param QueryType $queryType
      * @param MutationType $mutationType
-     * @param TypesRegistry $typesRegistry
      */
     public function __construct(
         EntityManagerInterface $em,
         QueryType $queryType,
-        MutationType $mutationType,
-        TypesRegistry $typesRegistry)
+        MutationType $mutationType)
     {
         $this->schema = new Schema([
             'query' => $queryType,
             'mutation' => $mutationType,
-            'typeLoader' => function($name) use ($typesRegistry) {
-                return $typesRegistry->getTypeByName($name);
-            }
         ]);
         $this->em = $em;
     }

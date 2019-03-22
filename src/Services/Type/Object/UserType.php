@@ -46,7 +46,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
                     'password' => Type::string(),
                     'email' => Type::string(),
                     'enabled' => Type::boolean(),
-                    'teams' => ['type' => Type::listOf($registry->getTypeByName('Team'))],
+                    'teams' => ['type' => Type::listOf($registry->getTypeByName('team'))],
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -83,7 +83,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getBaseTypeName(): string
     {
-        return 'User';
+        return 'user';
     }
 
     /**

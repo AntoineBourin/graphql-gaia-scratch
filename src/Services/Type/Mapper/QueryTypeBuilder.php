@@ -50,7 +50,7 @@ class QueryTypeBuilder
                 'args' => [],
                 'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $type) {
                     $this->accessChecker->hasAccess($args, $context, $type);
-                    return $typeRepository->findAll();
+                    return $typeRepository->findBy([], null, $value['limit'] ?? NULL, $value['offset'] ?? NULL);
                 },
             ],
         ];
