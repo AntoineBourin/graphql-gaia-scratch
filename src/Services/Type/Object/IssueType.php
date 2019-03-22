@@ -7,6 +7,7 @@ use App\Services\Type\FieldResolver;
 use App\Services\Type\GraphCustomTypeInterface;
 use App\Services\Type\Input\IssueInputType;
 use App\Services\Type\Registry\TypesRegistry;
+use App\Services\Type\Scalar\DateTimeType;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -29,7 +30,7 @@ class IssueType extends FieldResolver implements GraphCustomTypeInterface
      * @param IssueInputType $issueInputType
      * @param TypesRegistry $registry
      */
-    public function __construct(IssueRepository $issueRepository, IssueInputType $issueInputType, TypesRegistry $registry)
+    public function __construct(IssueRepository $issueRepository, IssueInputType $issueInputType, TypesRegistry $registry, DateTimeType $dateTimeType)
     {
         $this->issueRepository = $issueRepository;
         $this->issueInputType = $issueInputType;
@@ -37,7 +38,7 @@ class IssueType extends FieldResolver implements GraphCustomTypeInterface
         $config = [
             'name' => $this->getBaseTypeName(),
             'description' => 'Different issues created by users assigned to users',
-            'fields' => function () use($registry) {
+            'fields' => function () use($registry, $dateTimeType) {
                 return [
                     'id' => Type::id(),
                     'title' => Type::string(),
@@ -45,6 +46,8 @@ class IssueType extends FieldResolver implements GraphCustomTypeInterface
                     'createdBy' => ['type' => $registry->getTypeByName('user')],
                     'state' => ['type' => $registry->getTypeByName('state')],
                     'assignedTo' => ['type' => $registry->getTypeByName('user')],
+                    'createdAt' => $dateTimeType,
+                    'updatedAt' => $dateTimeType,
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {

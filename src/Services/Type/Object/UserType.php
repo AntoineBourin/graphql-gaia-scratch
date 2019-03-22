@@ -8,6 +8,7 @@ use App\Services\Type\FieldResolver;
 use App\Services\Type\GraphCustomTypeInterface;
 use App\Services\Type\Input\UserInputType;
 use App\Services\Type\Registry\TypesRegistry;
+use App\Services\Type\Scalar\EmailType;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -29,8 +30,9 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      * @param UserRepository $userRepository
      * @param UserInputType $userInputType
      * @param TypesRegistry $registry
+     * @param EmailType $emailType
      */
-    public function __construct(UserRepository $userRepository, UserInputType $userInputType, TypesRegistry $registry)
+    public function __construct(UserRepository $userRepository, UserInputType $userInputType, TypesRegistry $registry, EmailType $emailType)
     {
         $this->userRepository = $userRepository;
         $this->userInputType = $userInputType;
@@ -38,13 +40,13 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
         $config = [
             'name' => $this->getBaseTypeName(),
             'description' => 'User using application',
-            'fields' => function () use($registry) {
+            'fields' => function () use($registry, $emailType) {
                 return [
                     'id' => Type::id(),
                     'firstName' => Type::string(),
                     'lastName' => Type::string(),
                     'password' => Type::string(),
-                    'email' => Type::string(),
+                    'email' => $emailType,
                     'enabled' => Type::boolean(),
                     'teams' => ['type' => Type::listOf($registry->getTypeByName('team'))],
                     'assignedIssues' => ['type' => Type::listOf($registry->getTypeByName('issue'))],
