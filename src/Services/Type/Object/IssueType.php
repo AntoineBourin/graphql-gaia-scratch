@@ -2,52 +2,49 @@
 
 namespace App\Services\Type\Object;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Repository\IssueRepository;
 use App\Services\Type\FieldResolver;
 use App\Services\Type\GraphCustomTypeInterface;
-use App\Services\Type\Input\UserInputType;
+use App\Services\Type\Input\IssueInputType;
 use App\Services\Type\Registry\TypesRegistry;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 
-class UserType extends FieldResolver implements GraphCustomTypeInterface
+class IssueType extends FieldResolver implements GraphCustomTypeInterface
 {
     /**
-     * @var UserRepository
+     * @var IssueRepository
      */
-    private $userRepository;
+    private $issueRepository;
 
     /**
-     * @var UserInputType
+     * @var IssueInputType
      */
-    private $userInputType;
+    private $issueInputType;
 
     /**
-     * @param UserRepository $userRepository
-     * @param UserInputType $userInputType
+     * @param IssueRepository $issueRepository
+     * @param IssueInputType $issueInputType
      * @param TypesRegistry $registry
      */
-    public function __construct(UserRepository $userRepository, UserInputType $userInputType, TypesRegistry $registry)
+    public function __construct(IssueRepository $issueRepository, IssueInputType $issueInputType, TypesRegistry $registry)
     {
-        $this->userRepository = $userRepository;
-        $this->userInputType = $userInputType;
+        $this->issueRepository = $issueRepository;
+        $this->issueInputType = $issueInputType;
 
         $config = [
             'name' => $this->getBaseTypeName(),
-            'description' => 'User using application',
+            'description' => 'Different issues created by users assigned to users',
             'fields' => function () use($registry) {
                 return [
                     'id' => Type::id(),
-                    'firstName' => Type::string(),
-                    'lastName' => Type::string(),
-                    'password' => Type::string(),
-                    'email' => Type::string(),
-                    'enabled' => Type::boolean(),
-                    'teams' => ['type' => Type::listOf($registry->getTypeByName('team'))],
-                    'assignedIssues' => ['type' => Type::listOf($registry->getTypeByName('issue'))],
+                    'title' => Type::string(),
+                    'description' => Type::string(),
+                    'createdBy' => ['type' => $registry->getTypeByName('user')],
+                    'state' => ['type' => $registry->getTypeByName('state')],
+                    'assignedTo' => ['type' => $registry->getTypeByName('user')],
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -63,7 +60,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getTypeRepository(): EntityRepository
     {
-        return $this->userRepository;
+        return $this->issueRepository;
     }
 
     /**
@@ -71,7 +68,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getBaseTypeName(): string
     {
-        return 'user';
+        return 'issue';
     }
 
     /**
@@ -79,7 +76,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getInputType(): InputType
     {
-        return $this->userInputType;
+        return $this->issueInputType;
     }
 
     /**
@@ -89,6 +86,6 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function hasResourceAccess($args, $context): bool
     {
-        return isset($args['id']) ? $args['id'] === $context['authentication']['userId'] : true;
+        return true;
     }
 }
