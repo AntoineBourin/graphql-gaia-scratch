@@ -8,6 +8,7 @@ use App\Services\Type\FieldResolver;
 use App\Services\Type\GraphCustomTypeInterface;
 use App\Services\Type\Input\TeamInputType;
 use App\Services\Type\Registry\TypesRegistry;
+use App\Services\Type\Scalar\DateTimeType;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -30,7 +31,7 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
      * @param TeamInputType $teamInputType
      * @param TypesRegistry $registry
      */
-    public function __construct(TeamRepository $teamRepository, TeamInputType $teamInputType, TypesRegistry $registry)
+    public function __construct(TeamRepository $teamRepository, TeamInputType $teamInputType, TypesRegistry $registry, DateTimeType $dateTimeType)
     {
         $this->teamRepository = $teamRepository;
         $this->teamInputType = $teamInputType;
@@ -38,13 +39,15 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
         $config = [
             'name' => $this->getBaseTypeName(),
             'description' => 'Team attached to users',
-            'fields' => function () use($registry) {
+            'fields' => function () use($registry, $dateTimeType) {
                 return [
                     'id' => Type::id(),
                     'label' => Type::string(),
                     'description' => Type::string(),
                     'users' => ['type' => Type::listOf($registry->getTypeByName('user'))],
                     'states' => ['type' => Type::listOf($registry->getTypeByName('state'))],
+                    'createdAt' => $dateTimeType,
+                    'updatedAt' => $dateTimeType,
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
