@@ -34,5 +34,12 @@ services:
         App\Services\Type\GraphCustomTypeInterface:
             tags: ['app.types']
 
+    App\Normalizer\EntityNormalizer:
+        public: false
+        autowire: true
+        autoconfigure: true
+        tags:
+            - { name: serializer.normalizer }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

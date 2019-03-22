@@ -15,9 +15,9 @@ class TeamInputType extends InputObjectType implements InputType
             'description' => 'Team input for mutations args',
             'fields' => function () {
                 return [
-                    'id' => Type::int(),
                     'label' => Type::string(),
                     'description' => Type::string(),
+                    'users' => Type::listOf(Type::id()),
                 ];
             },
         ];

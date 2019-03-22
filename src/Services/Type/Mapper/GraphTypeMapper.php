@@ -2,14 +2,14 @@
 
 namespace App\Services\Type\Mapper;
 
-use App\Services\Type\TypesChain;
+use App\Services\Type\Registry\TypesRegistry;
 
 class GraphTypeMapper
 {
     /**
-     * @var TypesChain
+     * @var TypesRegistry
      */
-    private $typesChain;
+    private $typesRegistry;
 
     /**
      * @var MutationTypeBuilder
@@ -21,9 +21,9 @@ class GraphTypeMapper
      */
     private $queryTypeBuilder;
 
-    public function __construct(TypesChain $typesChain, QueryTypeBuilder $queryTypeBuilder, MutationTypeBuilder $mutationTypeBuilder)
+    public function __construct(TypesRegistry $typesRegistry, QueryTypeBuilder $queryTypeBuilder, MutationTypeBuilder $mutationTypeBuilder)
     {
-        $this->typesChain = $typesChain;
+        $this->typesRegistry = $typesRegistry;
         $this->queryTypeBuilder = $queryTypeBuilder;
         $this->mutationTypeBuilder = $mutationTypeBuilder;
     }
@@ -35,7 +35,7 @@ class GraphTypeMapper
     {
         $queriesFields = [];
         $builder = $this->queryTypeBuilder;
-        foreach ($this->typesChain->getTypes() as $type) {
+        foreach ($this->typesRegistry->getTypes() as $type) {
             $queriesFields = array_merge($queriesFields, $builder($type->getTypeRepository(), $type->getBaseTypeName(), $type));
         }
 
@@ -49,7 +49,7 @@ class GraphTypeMapper
     {
         $mutationsFields = [];
         $builder = $this->mutationTypeBuilder;
-        foreach ($this->typesChain->getTypes() as $type) {
+        foreach ($this->typesRegistry->getTypes() as $type) {
             $mutationsFields = array_merge($mutationsFields, $builder($type->getTypeRepository(), $type->getBaseTypeName(), $type, $type->getInputType()));
         }
 
