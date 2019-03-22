@@ -33,9 +33,15 @@ class Team
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\State", mappedBy="team", orphanRemoval=true)
+     */
+    private $states;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->states = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,6 +96,37 @@ class Team
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
             $user->removeTeam($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|State[]
+     */
+    public function getStates(): Collection
+    {
+        return $this->states;
+    }
+
+    public function addState(State $state): self
+    {
+        if (!$this->states->contains($state)) {
+            $this->states[] = $state;
+            $state->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeState(State $state): self
+    {
+        if ($this->states->contains($state)) {
+            $this->states->removeElement($state);
+            // set the owning side to null (unless already changed)
+            if ($state->getTeam() === $this) {
+                $state->setTeam(null);
+            }
         }
 
         return $this;
