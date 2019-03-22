@@ -54,6 +54,10 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
         parent::__construct($config);
     }
 
+    /**
+     * @param $value
+     * @return \App\Entity\User[]|\Doctrine\Common\Collections\Collection|null
+     */
     public function methodUsers($value)
     {
         if (!$value instanceof Team) {
@@ -91,6 +95,11 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
         return $this->teamInputType;
     }
 
+    /**
+     * @param $args
+     * @param $context
+     * @return bool
+     */
     public function hasResourceAccess($args, $context): bool
     {
         return true;

@@ -17,6 +17,10 @@ class TypesRegistry
         $this->typesChain = $typesChain;
     }
 
+    /**
+     * @param $name
+     * @return ObjectType|null
+     */
     public function getTypeByName($name): ?ObjectType
     {
         foreach ($this->typesChain->getTypes() as $type) {
@@ -28,6 +32,9 @@ class TypesRegistry
         return null;
     }
 
+    /**
+     * @return array
+     */
     public function getTypes(): array
     {
         return $this->typesChain->getTypes();

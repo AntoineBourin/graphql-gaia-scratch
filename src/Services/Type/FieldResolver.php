@@ -7,6 +7,10 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class FieldResolver extends ObjectType
 {
+    /**
+     * FieldResolver constructor.
+     * @param $config
+     */
     public function __construct($config)
     {
         parent::__construct($config);

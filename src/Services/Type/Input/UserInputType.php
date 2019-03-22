@@ -2,14 +2,15 @@
 
 namespace App\Services\Type\Input;
 
-use App\Services\Type\TeamType;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\InputType;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
 class UserInputType extends InputObjectType implements InputType
 {
+    /**
+     * UserInputType constructor.
+     */
     public function __construct()
     {
         $config = [

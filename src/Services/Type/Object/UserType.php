@@ -57,6 +57,10 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
         parent::__construct($config);
     }
 
+    /**
+     * @param $value
+     * @return \App\Entity\Team[]|\Doctrine\Common\Collections\Collection|null
+     */
     public function getTeams($value)
     {
         if (!$value instanceof User) {
@@ -90,6 +94,11 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
         return $this->userInputType;
     }
 
+    /**
+     * @param $args
+     * @param $context
+     * @return bool
+     */
     public function hasResourceAccess($args, $context): bool
     {
         return isset($args['id']) ? $args['id'] === $context['authentication']['userId'] : true;

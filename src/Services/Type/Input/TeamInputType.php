@@ -8,6 +8,9 @@ use GraphQL\Type\Definition\Type;
 
 class TeamInputType extends InputObjectType implements InputType
 {
+    /**
+     * TeamInputType constructor.
+     */
     public function __construct()
     {
         $config = [

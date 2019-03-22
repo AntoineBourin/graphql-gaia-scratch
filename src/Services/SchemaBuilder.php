@@ -23,6 +23,13 @@ class SchemaBuilder
      */
     private $schema;
 
+    /**
+     * SchemaBuilder constructor.
+     * @param EntityManagerInterface $em
+     * @param QueryType $queryType
+     * @param MutationType $mutationType
+     * @param TypesRegistry $typesRegistry
+     */
     public function __construct(
         EntityManagerInterface $em,
         QueryType $queryType,

@@ -23,12 +23,24 @@ class MutationTypeBuilder
      */
     private $accessChecker;
 
+    /**
+     * MutationTypeBuilder constructor.
+     * @param DataPersister $dataPersister
+     * @param AccessChecker $accessChecker
+     */
     public function __construct(DataPersister $dataPersister, AccessChecker $accessChecker)
     {
         $this->dataPersister = $dataPersister;
         $this->accessChecker = $accessChecker;
     }
 
+    /**
+     * @param EntityRepository $typeRepository
+     * @param string $baseName
+     * @param GraphCustomTypeInterface $type
+     * @param InputType $inputType
+     * @return array
+     */
     public function __invoke(EntityRepository $typeRepository, string $baseName, GraphCustomTypeInterface $type, InputType $inputType): array
     {
         $updateEndpoint = sprintf('update%s', ucfirst($baseName));

@@ -15,6 +15,10 @@ class QueryTypeBuilder
      */
     private $accessChecker;
 
+    /**
+     * QueryTypeBuilder constructor.
+     * @param AccessChecker $accessChecker
+     */
     public function __construct(AccessChecker $accessChecker)
     {
         $this->accessChecker = $accessChecker;

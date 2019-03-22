@@ -6,11 +6,17 @@ class TypesChain
 {
     private $types;
 
+    /**
+     * TypesChain constructor.
+     */
     public function __construct()
     {
         $this->types = [];
     }
 
+    /**
+     * @param GraphCustomTypeInterface $type
+     */
     public function addType(GraphCustomTypeInterface $type): void
     {
         $this->types[] = $type;

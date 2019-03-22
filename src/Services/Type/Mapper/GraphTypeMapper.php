@@ -21,6 +21,12 @@ class GraphTypeMapper
      */
     private $queryTypeBuilder;
 
+    /**
+     * GraphTypeMapper constructor.
+     * @param TypesRegistry $typesRegistry
+     * @param QueryTypeBuilder $queryTypeBuilder
+     * @param MutationTypeBuilder $mutationTypeBuilder
+     */
     public function __construct(TypesRegistry $typesRegistry, QueryTypeBuilder $queryTypeBuilder, MutationTypeBuilder $mutationTypeBuilder)
     {
         $this->typesRegistry = $typesRegistry;
