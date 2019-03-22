@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Type;
+namespace App\Services\Type\Root;
 
 use App\Services\Type\Mapper\GraphTypeMapper;
 use GraphQL\Type\Definition\ObjectType;
 
-class MutationType extends ObjectType
+class QueryType extends ObjectType
 {
     /**
      * QueryType constructor.
@@ -13,10 +13,10 @@ class MutationType extends ObjectType
      */
     public function __construct(GraphTypeMapper $graphTypeMapper)
     {
-        $rootMutations = $graphTypeMapper->getBasicsMutations();
+        $rootQueries = $graphTypeMapper->getBasicsQueries();
         $config = [
-            'name' => 'Mutation',
-            'fields' => $rootMutations,
+            'name' => 'Query',
+            'fields' => $rootQueries,
         ];
 
         parent::__construct($config);

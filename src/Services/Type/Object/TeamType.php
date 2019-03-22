@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Services\Type;
+namespace App\Services\Type\Object;
 
 use App\Entity\Team;
 use App\Repository\TeamRepository;
-use App\Repository\UserRepository;
+use App\Services\Type\FieldResolver;
+use App\Services\Type\GraphCustomTypeInterface;
 use App\Services\Type\Input\TeamInputType;
-use App\Services\Type\Input\UserInputType;
-use App\Services\Type\Mapper\GraphTypeMapper;
 use App\Services\Type\Registry\TypesRegistry;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
