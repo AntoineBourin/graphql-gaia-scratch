@@ -43,7 +43,7 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
                     'id' => Type::id(),
                     'label' => Type::string(),
                     'description' => Type::string(),
-                    'users' => ['type' => Type::listOf($registry->getTypeByName('User'))],
+                    'users' => ['type' => Type::listOf($registry->getTypeByName('user'))],
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -84,7 +84,7 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getBaseTypeName(): string
     {
-        return 'Team';
+        return 'team';
     }
 
     /**
