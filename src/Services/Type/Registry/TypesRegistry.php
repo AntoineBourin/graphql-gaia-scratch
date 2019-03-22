@@ -28,7 +28,7 @@ class TypesRegistry
         return null;
     }
 
-    public function getTypes()
+    public function getTypes(): array
     {
         return $this->typesChain->getTypes();
     }
