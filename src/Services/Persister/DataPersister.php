@@ -5,6 +5,7 @@ namespace App\Services\Persister;
 
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use GraphQL\Error\Error;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -26,11 +27,17 @@ class DataPersister
      */
     private $validator;
 
-    public function __construct(ManagerRegistry $managerRegistry, DenormalizerInterface $denormalizer, ValidatorInterface $validator)
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    public function __construct(ManagerRegistry $managerRegistry, DenormalizerInterface $denormalizer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
         $this->managerRegistry = $managerRegistry;
         $this->denormalizer = $denormalizer;
         $this->validator = $validator;
+        $this->em = $entityManager;
     }
 
     /**

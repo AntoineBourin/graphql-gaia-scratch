@@ -2,6 +2,7 @@
 
 namespace App\Services\Type;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\Type\Input\UserInputType;
 use Doctrine\ORM\EntityRepository;
@@ -24,8 +25,9 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
     /**
      * @param UserRepository $userRepository
      * @param UserInputType $userInputType
+     * @param TeamType $teamType
      */
-    public function __construct(UserRepository $userRepository, UserInputType $userInputType)
+    public function __construct(UserRepository $userRepository, UserInputType $userInputType, TeamType $teamType)
     {
         $this->userRepository = $userRepository;
         $this->userInputType = $userInputType;
@@ -33,7 +35,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
         $config = [
             'name' => 'User',
             'description' => 'User using application',
-            'fields' => function () {
+            'fields' => function () use($teamType) {
                 return [
                     'id' => Type::id(),
                     'firstName' => Type::string(),
@@ -41,6 +43,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
                     'password' => Type::string(),
                     'email' => Type::string(),
                     'enabled' => Type::boolean(),
+                    'teams' => Type::listOf($teamType),
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -49,6 +52,15 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
         ];
 
         parent::__construct($config);
+    }
+
+    public function getTeams($value)
+    {
+        if (!$value instanceof User) {
+            return null;
+        }
+
+        return $value->getTeams();
     }
 
     /**
