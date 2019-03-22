@@ -57,9 +57,21 @@ class User implements UserInterface
      */
     private $teams;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Issue", mappedBy="createdBy")
+     */
+    private $createdIssues;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Issue", mappedBy="assignedTo")
+     */
+    private $assignedIssues;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
+        $this->createdIssues = new ArrayCollection();
+        $this->assignedIssues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +223,68 @@ class User implements UserInterface
     {
         if ($this->teams->contains($team)) {
             $this->teams->removeElement($team);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Issue[]
+     */
+    public function getCreatedIssues(): Collection
+    {
+        return $this->createdIssues;
+    }
+
+    public function addCreatedIssue(Issue $issue): self
+    {
+        if (!$this->createdIssues->contains($issue)) {
+            $this->createdIssues[] = $issue;
+            $issue->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedIssue(Issue $issue): self
+    {
+        if ($this->createdIssues->contains($issue)) {
+            $this->createdIssues->removeElement($issue);
+            // set the owning side to null (unless already changed)
+            if ($issue->getCreatedBy() === $this) {
+                $issue->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Issue[]
+     */
+    public function getAssignedIssues(): Collection
+    {
+        return $this->assignedIssues;
+    }
+
+    public function addAssignedIssue(Issue $assignedIssue): self
+    {
+        if (!$this->assignedIssues->contains($assignedIssue)) {
+            $this->assignedIssues[] = $assignedIssue;
+            $assignedIssue->setAssignedTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedIssue(Issue $assignedIssue): self
+    {
+        if ($this->assignedIssues->contains($assignedIssue)) {
+            $this->assignedIssues->removeElement($assignedIssue);
+            // set the owning side to null (unless already changed)
+            if ($assignedIssue->getAssignedTo() === $this) {
+                $assignedIssue->setAssignedTo(null);
+            }
         }
 
         return $this;

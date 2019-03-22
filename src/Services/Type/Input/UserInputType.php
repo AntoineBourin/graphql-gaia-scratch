@@ -23,6 +23,7 @@ class UserInputType extends InputObjectType implements InputType
                     'password' => Type::string(),
                     'email' => Type::string(),
                     'enabled' => Type::boolean(),
+                    'teams' => Type::listOf(Type::id()),
                 ];
             },
         ];

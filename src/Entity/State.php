@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class State
      * @ORM\JoinColumn(nullable=false)
      */
     private $team;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Issue", mappedBy="state")
+     */
+    private $issues;
+
+    public function __construct()
+    {
+        $this->issues = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,37 @@ class State
     public function setTeam(?Team $team): self
     {
         $this->team = $team;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Issue[]
+     */
+    public function getIssues(): Collection
+    {
+        return $this->issues;
+    }
+
+    public function addIssue(Issue $issue): self
+    {
+        if (!$this->issues->contains($issue)) {
+            $this->issues[] = $issue;
+            $issue->setState($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIssue(Issue $issue): self
+    {
+        if ($this->issues->contains($issue)) {
+            $this->issues->removeElement($issue);
+            // set the owning side to null (unless already changed)
+            if ($issue->getState() === $this) {
+                $issue->setState(null);
+            }
+        }
 
         return $this;
     }
