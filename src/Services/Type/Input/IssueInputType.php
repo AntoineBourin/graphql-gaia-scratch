@@ -9,7 +9,7 @@ use GraphQL\Type\Definition\Type;
 class IssueInputType extends InputObjectType implements InputType
 {
     /**
-     * StateInputType constructor.
+     * IssueInputType constructor.
      */
     public function __construct()
     {

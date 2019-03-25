@@ -2,47 +2,47 @@
 
 namespace App\Services\Type\Object;
 
-use App\Repository\StateRepository;
+use App\Repository\ProjectRepository;
 use App\Services\Type\FieldResolver;
 use App\Services\Type\GraphCustomTypeInterface;
-use App\Services\Type\Input\StateInputType;
+use App\Services\Type\Input\ProjectInputType;
 use App\Services\Type\Registry\TypesRegistry;
 use Doctrine\ORM\EntityRepository;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 
-class StateType extends FieldResolver implements GraphCustomTypeInterface
+class ProjectType extends FieldResolver implements GraphCustomTypeInterface
 {
     /**
-     * @var StateRepository
+     * @var ProjectRepository
      */
-    private $stateRepository;
+    private $projectRepository;
 
     /**
-     * @var StateInputType
+     * @var ProjectInputType
      */
-    private $stateInputType;
+    private $projectInputType;
 
     /**
-     * @param StateRepository $stateRepository
-     * @param StateInputType $stateInputType
+     * @param ProjectRepository $projectRepository
+     * @param ProjectInputType $projectInputType
      * @param TypesRegistry $registry
      */
-    public function __construct(StateRepository $stateRepository, StateInputType $stateInputType, TypesRegistry $registry)
+    public function __construct(ProjectRepository $projectRepository, ProjectInputType $projectInputType, TypesRegistry $registry)
     {
-        $this->stateRepository = $stateRepository;
-        $this->stateInputType = $stateInputType;
+        $this->projectRepository = $projectRepository;
+        $this->projectInputType = $projectInputType;
 
         $config = [
             'name' => $this->getBaseTypeName(),
-            'description' => 'Different state inside a team',
+            'description' => 'Different projects created by users on teams',
             'fields' => function () use($registry) {
                 return [
                     'id' => Type::id(),
                     'label' => Type::string(),
-                    'weight' => Type::int(),
-                    'project' => ['type' => $registry->getTypeByName('project')],
+                    'states' => ['type' => Type::listOf($registry->getTypeByName('state'))],
+                    'team' => ['type' => $registry->getTypeByName('team')],
                 ];
             },
             'resolveField' => function($value, $args, $context, ResolveInfo $info) {
@@ -58,7 +58,7 @@ class StateType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getTypeRepository(): EntityRepository
     {
-        return $this->stateRepository;
+        return $this->projectRepository;
     }
 
     /**
@@ -66,7 +66,7 @@ class StateType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getBaseTypeName(): string
     {
-        return 'state';
+        return 'project';
     }
 
     /**
@@ -74,7 +74,7 @@ class StateType extends FieldResolver implements GraphCustomTypeInterface
      */
     public function getInputType(): InputType
     {
-        return $this->stateInputType;
+        return $this->projectInputType;
     }
 
     /**

@@ -29,15 +29,15 @@ class State
     private $weight;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="states")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $team;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Issue", mappedBy="state")
      */
     private $issues;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="states")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $project;
 
     public function __construct()
     {
@@ -73,18 +73,6 @@ class State
         return $this;
     }
 
-    public function getTeam(): ?Team
-    {
-        return $this->team;
-    }
-
-    public function setTeam(?Team $team): self
-    {
-        $this->team = $team;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Issue[]
      */
@@ -112,6 +100,18 @@ class State
                 $issue->setState(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

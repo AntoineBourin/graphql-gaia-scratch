@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Normalizer;
 
+use App\Exception\ItemNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
@@ -48,9 +49,17 @@ class EntityNormalizer extends ObjectNormalizer
 
     /**
      * @inheritDoc
+     * @throws ItemNotFoundException
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        return $this->em->find($class, isset($data['id']) ? $data['id'] : $data);
+        $idToSearch = isset($data['id']) ? $data['id'] : $data;
+        $objectResult = $this->em->find($class, $idToSearch);
+
+        if (!$objectResult) {
+            throw new ItemNotFoundException(sprintf('Item of class %s with ID %s was not found in database', $class, $idToSearch), 404);
+        }
+
+        return $objectResult;
     }
 }

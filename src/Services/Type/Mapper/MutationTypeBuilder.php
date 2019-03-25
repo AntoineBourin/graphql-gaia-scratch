@@ -63,7 +63,11 @@ class MutationTypeBuilder
                     }
 
                     $context = ['resource_class' => get_class($objectClass), 'object_to_populate' => $objectClass];
-                    $denormalizedObject = $this->dataPersister->denormalizeObject($args['input'], get_class($objectClass), $context);
+                    try {
+                        $denormalizedObject = $this->dataPersister->denormalizeObject($args['input'], get_class($objectClass), $context);
+                    } catch (\Exception $exception) {
+                        throw Error::createLocatedError($exception->getMessage());
+                    }
 
                     return $this->dataPersister->persist($denormalizedObject);
                 },
@@ -94,7 +98,11 @@ class MutationTypeBuilder
                 'resolve' => function($value, $args, $context, ResolveInfo $info) use ($typeRepository, $baseName, $type) {
                     $this->accessChecker->hasAccess($args, $context, $type);
                     $resourceClass = $typeRepository->getClassName();
-                    $denormalizedObject = $this->dataPersister->denormalizeObject($args['input'], $resourceClass, []);
+                    try {
+                        $denormalizedObject = $this->dataPersister->denormalizeObject($args['input'], $resourceClass, []);
+                    } catch (\Exception $exception) {
+                        throw Error::createLocatedError($exception->getMessage());
+                    }
 
                     return $this->dataPersister->persist($denormalizedObject);
                 },
