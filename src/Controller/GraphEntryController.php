@@ -19,16 +19,26 @@ class GraphEntryController
      */
     private $contextBuilder;
 
+    /**
+     * GraphEntryController constructor.
+     * @param SchemaBuilder $schemaBuilder
+     * @param ContextBuilder $contextBuilder
+     */
     public function __construct(SchemaBuilder $schemaBuilder, ContextBuilder $contextBuilder)
     {
         $this->schemaBuilder = $schemaBuilder;
         $this->contextBuilder = $contextBuilder;
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function graphQLEntryPoint(Request $request)
     {
         $requestBody = json_decode($request->getContent());
         $currentContext = $this->contextBuilder->generate();
-        return $this->schemaBuilder->throwNewGraphQuery($requestBody->query ?? NULL, $currentContext);
+
+        return $this->schemaBuilder->triggerNewGraphQuery($requestBody->query ?? NULL, $currentContext);
     }
 }

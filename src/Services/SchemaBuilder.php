@@ -46,7 +46,7 @@ class SchemaBuilder
      * @param array $context
      * @return JsonResponse
      */
-    public function throwNewGraphQuery(?string $query, array $context): JsonResponse
+    public function triggerNewGraphQuery(?string $query, array $context): JsonResponse
     {
         $result = GraphQL::executeQuery(
             $this->schema,
