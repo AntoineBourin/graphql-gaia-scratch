@@ -45,7 +45,6 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
                     'id' => Type::id(),
                     'firstName' => Type::string(),
                     'lastName' => Type::string(),
-                    'password' => Type::string(),
                     'email' => $emailType,
                     'enabled' => Type::boolean(),
                     'teams' => ['type' => Type::listOf($registry->getTypeByName('team'))],

@@ -22,7 +22,6 @@ class UserInputType extends InputObjectType implements InputType
                 return [
                     'firstName' => Type::string(),
                     'lastName' => Type::string(),
-                    'password' => Type::string(),
                     'email' => $emailType,
                     'enabled' => Type::boolean(),
                     'teams' => Type::listOf(Type::id()),
