@@ -37,14 +37,14 @@ class Team
     private $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\State", mappedBy="team", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="team", orphanRemoval=true)
      */
-    private $states;
+    private $projects;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->states = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,30 +105,30 @@ class Team
     }
 
     /**
-     * @return Collection|State[]
+     * @return Collection|Project[]
      */
-    public function getStates(): Collection
+    public function getProjects(): Collection
     {
-        return $this->states;
+        return $this->projects;
     }
 
-    public function addState(State $state): self
+    public function addProject(Project $project): self
     {
-        if (!$this->states->contains($state)) {
-            $this->states[] = $state;
-            $state->setTeam($this);
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setTeam($this);
         }
 
         return $this;
     }
 
-    public function removeState(State $state): self
+    public function removeProject(Project $project): self
     {
-        if ($this->states->contains($state)) {
-            $this->states->removeElement($state);
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
             // set the owning side to null (unless already changed)
-            if ($state->getTeam() === $this) {
-                $state->setTeam(null);
+            if ($project->getTeam() === $this) {
+                $project->setTeam(null);
             }
         }
 

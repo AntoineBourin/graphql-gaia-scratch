@@ -45,7 +45,7 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
                     'label' => Type::string(),
                     'description' => Type::string(),
                     'users' => ['type' => Type::listOf($registry->getTypeByName('user'))],
-                    'states' => ['type' => Type::listOf($registry->getTypeByName('state'))],
+                    'projects' => ['type' => Type::listOf($registry->getTypeByName('project'))],
                     'createdAt' => $dateTimeType,
                     'updatedAt' => $dateTimeType,
                 ];

@@ -6,21 +6,21 @@ use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\InputType;
 use GraphQL\Type\Definition\Type;
 
-class StateInputType extends InputObjectType implements InputType
+class ProjectInputType extends InputObjectType implements InputType
 {
     /**
-     * StateInputType constructor.
+     * ProjectInputType constructor.
      */
     public function __construct()
     {
         $config = [
-            'name' => 'StateInput',
-            'description' => 'State input for mutations args',
+            'name' => 'ProjectInput',
+            'description' => 'Project input for mutations args',
             'fields' => function () {
                 return [
                     'label' => Type::string(),
-                    'weight' => Type::int(),
-                    'project' => Type::id(),
+                    'states' => Type::listOf(Type::id()),
+                    'team' => Type::id(),
                 ];
             },
         ];
