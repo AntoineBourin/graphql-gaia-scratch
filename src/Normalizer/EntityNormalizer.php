@@ -57,7 +57,10 @@ class EntityNormalizer extends ObjectNormalizer
         $objectResult = $this->em->find($class, $idToSearch);
 
         if (!$objectResult) {
-            throw new ItemNotFoundException(sprintf('Item of class %s with ID %s was not found in database', $class, $idToSearch), 404);
+            throw new ItemNotFoundException(
+                sprintf('Item of %s resource with ID %s was not found in database', str_replace('App\\Entity\\', '', $class), $idToSearch),
+                404
+            );
         }
 
         return $objectResult;
