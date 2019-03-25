@@ -11,4 +11,6 @@ interface GraphCustomTypeInterface
     public function getBaseTypeName(): string;
     public function getInputType(): InputType;
     public function hasResourceAccess($args, $context): bool;
+    public function getCustomQueries(): array;
+    public function getCustomMutations(): array;
 }
