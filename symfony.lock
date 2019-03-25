@@ -105,6 +105,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.36"
     },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v0.6.0"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
