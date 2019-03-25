@@ -33,4 +33,20 @@ class FieldResolver extends ObjectType
             return method_exists($value, $methodField) ? $value->{$methodField}() : null;
         }
     }
+
+    /**
+     * @return array
+     */
+    public function getCustomQueries(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomMutations(): array
+    {
+        return [];
+    }
 }

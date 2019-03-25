@@ -42,7 +42,10 @@ class GraphTypeMapper
         $queriesFields = [];
         $builder = $this->queryTypeBuilder;
         foreach ($this->typesRegistry->getTypes() as $type) {
-            $queriesFields = array_merge($queriesFields, $builder($type->getTypeRepository(), $type->getBaseTypeName(), $type));
+            $queriesFields = array_merge(
+                $queriesFields,
+                array_merge($builder($type->getTypeRepository(), $type->getBaseTypeName(), $type), $type->getCustomQueries())
+            );
         }
 
         return $queriesFields;
@@ -56,7 +59,10 @@ class GraphTypeMapper
         $mutationsFields = [];
         $builder = $this->mutationTypeBuilder;
         foreach ($this->typesRegistry->getTypes() as $type) {
-            $mutationsFields = array_merge($mutationsFields, $builder($type->getTypeRepository(), $type->getBaseTypeName(), $type, $type->getInputType()));
+            $mutationsFields = array_merge(
+                $mutationsFields,
+                array_merge($builder($type->getTypeRepository(), $type->getBaseTypeName(), $type, $type->getInputType()), $type->getCustomMutations())
+            );
         }
 
         return $mutationsFields;
