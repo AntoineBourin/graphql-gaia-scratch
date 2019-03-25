@@ -13,3 +13,6 @@ account_confirmation:
   path: /api/user/confirm-email
   methods: [PUT]
   controller: App\Controller\AccountConfirmationController::confirmAccountWithTokenAction
+gesdinet_jwt_refresh_token:
+  path:       /api/token/refresh
+  controller: gesdinet.jwtrefreshtoken::refresh
