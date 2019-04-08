@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
+
 /**
  * Entity normalizer
  */
@@ -44,7 +45,7 @@ class EntityNormalizer extends ObjectNormalizer
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return strpos($type, 'App\\Entity\\') === 0 && (is_numeric($data) || is_string($data) || isset($data['id']));
+        return strpos($type, 'App\\Entity\\') === 0 && (is_numeric($data) || is_string($data));
     }
 
     /**

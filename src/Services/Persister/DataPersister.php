@@ -84,7 +84,11 @@ class DataPersister
         $this->validate($data);
 
         $manager = $this->getManager($data);
-        $manager->persist($data);
+
+        if (!$manager->contains($data))  {
+            $manager->persist($data);
+        }
+
         $manager->flush();
         $manager->refresh($data);
 

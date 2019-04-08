@@ -42,6 +42,7 @@ class StateType extends FieldResolver implements GraphCustomTypeInterface
                     'id' => Type::id(),
                     'label' => Type::string(),
                     'weight' => Type::int(),
+                    'issues' => ['type' => Type::listOf($registry->getTypeByName('issue'))],
                     'project' => ['type' => $registry->getTypeByName('project')],
                 ];
             },

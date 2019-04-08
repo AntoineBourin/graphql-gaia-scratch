@@ -69,7 +69,7 @@ class UserType extends FieldResolver implements GraphCustomTypeInterface
                 'type' => $this,
                 'description' => 'Get data of current user',
                 'resolve' => function($value, $args, $context, ResolveInfo $info) {
-                    return isset($context['authentication']['userId']) ? $this->userRepository->find($context['authentication']['userId']) : null;
+                    return $context['authentication'] ?? NULL;
                 }
             ],
         ];

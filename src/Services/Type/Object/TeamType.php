@@ -2,7 +2,6 @@
 
 namespace App\Services\Type\Object;
 
-use App\Entity\Team;
 use App\Repository\TeamRepository;
 use App\Services\Type\FieldResolver;
 use App\Services\Type\GraphCustomTypeInterface;
@@ -30,6 +29,7 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
      * @param TeamRepository $teamRepository
      * @param TeamInputType $teamInputType
      * @param TypesRegistry $registry
+     * @param DateTimeType $dateTimeType
      */
     public function __construct(TeamRepository $teamRepository, TeamInputType $teamInputType, TypesRegistry $registry, DateTimeType $dateTimeType)
     {
@@ -56,28 +56,6 @@ class TeamType extends FieldResolver implements GraphCustomTypeInterface
         ];
 
         parent::__construct($config);
-    }
-
-    /**
-     * @param $value
-     * @return \App\Entity\User[]|\Doctrine\Common\Collections\Collection|null
-     */
-    public function methodUsers($value)
-    {
-        if (!$value instanceof Team) {
-            return null;
-        }
-
-        return $value->getUsers();
-    }
-
-    public function methodStates($value)
-    {
-        if (!$value instanceof Team) {
-            return null;
-        }
-
-        return $value->getStates();
     }
 
     /**
