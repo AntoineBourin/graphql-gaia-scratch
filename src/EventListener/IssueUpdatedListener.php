@@ -3,43 +3,41 @@
 namespace App\EventListener;
 
 use App\Entity\Issue;
-use Doctrine\Common\Annotations\AnnotationReader;
+use App\Normalizer\GroupSerializer;
+use App\Services\Dispatcher\IssueDispatcher;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\Mercure\Update;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class IssueUpdatedListener
 {
     /**
-     * @var MessageBusInterface
+     * @var IssueDispatcher
      */
-    private $bus;
+    private $issueDispatcher;
+    /**
+     * @var GroupSerializer
+     */
+    private $serializer;
 
     /**
      * IssueUpdatedListener constructor.
-     * @param MessageBusInterface $bus
+     * @param IssueDispatcher $issueDispatcher
+     * @param GroupSerializer $serializer
      */
-    public function __construct(MessageBusInterface $bus)
+    public function __construct(IssueDispatcher $issueDispatcher, GroupSerializer $serializer)
     {
-
-        $this->bus = $bus;
+        $this->issueDispatcher = $issueDispatcher;
+        $this->serializer = $serializer;
     }
 
+    /**
+     * @param Issue $issue
+     * @param LifecycleEventArgs $args
+     */
     public function preUpdate(Issue $issue, LifecycleEventArgs $args)
     {
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $normalizer = new ObjectNormalizer($classMetadataFactory);
-        $serializer = new Serializer([$normalizer], [new JsonEncoder()]);
+        $issueSerialized = $this->serializer->serializeWithGroups($issue, 'json', ['public']);
+        $topicUpdate = sprintf('http://gaiaticket.com/project/%s', $issue->getState()->getProject()->getId());
 
-        $serializedIssue = $serializer->serialize($issue, 'json', ['groups' => ['public']]);
-        $projectId = $issue->getState()->getProject()->getId();
-        $mercureUpdate = new Update(sprintf('http://gaiaticket.com/project/%s', $projectId), $serializedIssue);
-
-        $this->bus->dispatch($mercureUpdate);
+        $this->issueDispatcher->dispatch($issueSerialized, $topicUpdate);
     }
 }
