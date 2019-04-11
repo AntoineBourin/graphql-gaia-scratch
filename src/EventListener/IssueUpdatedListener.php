@@ -35,7 +35,7 @@ class IssueUpdatedListener
      */
     public function preUpdate(Issue $issue, LifecycleEventArgs $args)
     {
-        $issueSerialized = $this->serializer->serializeWithGroups($issue, 'json', ['public']);
+        $issueSerialized = $this->serializer->serializeWithGroups($issue, 'json', ['lightPublish']);
         $topicUpdate = sprintf('http://gaiaticket.com/project/%s', $issue->getState()->getProject()->getId());
 
         $this->issueDispatcher->dispatch($issueSerialized, $topicUpdate);

@@ -20,18 +20,19 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"lightPublish"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"public"})
+     * @Groups({"public", "lightPublish"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"public"})
+     * @Groups({"public", "lightPublish"})
      */
     private $lastName;
 

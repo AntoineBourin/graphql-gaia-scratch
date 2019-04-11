@@ -17,19 +17,19 @@ class Issue
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"public"})
+     * @Groups({"lightPublish"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"public"})
+     * @Groups({"lightPublish"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"public"})
+     * @Groups({"lightPublish"})
      */
     private $description;
 
@@ -42,12 +42,14 @@ class Issue
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\State", inversedBy="issues")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lightPublish"})
      */
     private $state;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lightPublish"})
      */
     private $assignedTo;
 
