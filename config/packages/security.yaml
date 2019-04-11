@@ -20,15 +20,15 @@ security:
                 require_previous_session: false
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-        api:
-            pattern:   ^/api/graphql
-            stateless: true
-            guard:
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
+#        api:
+#            pattern:   ^/api/graphql
+#            stateless: true
+#            guard:
+#                authenticators:
+#                    - lexik_jwt_authentication.jwt_token_authenticator
         main:
             anonymous: true
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/graphql, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/graphql, roles: IS_AUTHENTICATED_FULLY }

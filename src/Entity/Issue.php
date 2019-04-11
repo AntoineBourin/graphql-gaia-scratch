@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\IssueRepository")
@@ -16,21 +17,24 @@ class Issue
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"lightPublish"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"lightPublish"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"lightPublish"})
      */
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="issues")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
@@ -38,12 +42,14 @@ class Issue
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\State", inversedBy="issues")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lightPublish"})
      */
     private $state;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="assignedIssues")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"lightPublish"})
      */
     private $assignedTo;
 

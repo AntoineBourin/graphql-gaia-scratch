@@ -16,6 +16,9 @@ class JWTCreatedListener
         $payload = [
             'userId' => $user->getId(),
             'email' => $user->getEmail(),
+            'fullname' => sprintf('%s %s', $user->getFirstName(), $user->getLastName()),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
         ];
 
         $event->setData($payload);

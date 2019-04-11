@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Services\ContextBuilder;
 use App\Services\SchemaBuilder;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class GraphEntryController
@@ -32,13 +33,13 @@ class GraphEntryController
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @return JsonResponse
      */
     public function graphQLEntryPoint(Request $request)
     {
         $requestBody = json_decode($request->getContent());
         $currentContext = $this->contextBuilder->generate();
 
-        return $this->schemaBuilder->triggerNewGraphQuery($requestBody->query ?? NULL, $currentContext);
+        return $this->schemaBuilder->triggerNewGraphQuery($requestBody->query ?? NULL, $currentContext, isset($requestBody->variables) ? (array) $requestBody->variables : NULL);
     }
 }
